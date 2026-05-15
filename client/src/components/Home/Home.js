@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { getPosts } from '../../actions/posts';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
+import FriendReviews from '../FriendReviews/FriendReviews';
 import useStyles from './styles';
 const Home = () => {
   const [currentId, setCurrentId] = useState(0);
@@ -29,6 +30,7 @@ const Home = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
+            <FriendReviews />
           </Grid>
         </Grid>
       </Container>
