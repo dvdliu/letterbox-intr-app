@@ -1,4 +1,4 @@
-# Letterbox App
+# Filterest
 
 A social media app for sharing posts and viewing friends' Letterboxd reviews. Users can sign up, sign in (including with Google), create and like posts, and see a feed of reviews their friends have left on Letterboxd.
 
