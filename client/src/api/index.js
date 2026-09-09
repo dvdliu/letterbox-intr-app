@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://hemant-sahu.herokuapp.com' });
+// Points at the local Express server by default; override with
+// REACT_APP_API_URL (in client/.env) once you deploy the server elsewhere.
+const API = axios.create({ baseURL: process.env.REACT_APP_API_URL || 'http://localhost:7000' });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
@@ -21,3 +23,7 @@ export const signUp = (formData) => API.post('/user/signup', formData);
 
 export const fetchFriendReviews = (username) => API.get('/letterboxd/friend-reviews', { params: { username } });
 export const fetchLetterboxdReview = (id) => API.get(`/letterboxd/reviews/${id}`);
+export const fetchMatch = (userA, userB) => API.get('/letterboxd/match', { params: { userA, userB } });
+export const fetchMatches = (username) => API.get('/letterboxd/matches', { params: { username } });
+
+export const updateProfile = (id, data) => API.patch(`/user/${id}`, data);

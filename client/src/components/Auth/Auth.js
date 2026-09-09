@@ -11,7 +11,19 @@ import { signin, signup } from '../../actions/auth';
 import useStyles from './styles';
 import Input from './Input';
 
-const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
+const initialState = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  letterboxdUsername: '',
+};
+
+// Google Sign-In is optional - set REACT_APP_GOOGLE_CLIENT_ID in client/.env
+// to enable it. Without it, `google_client_id` used to be an undefined
+// variable here, which threw and crashed this whole page on render.
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 const SignUp = () => {
   const [form, setForm] = useState(initialState);
@@ -69,6 +81,7 @@ const SignUp = () => {
             <>
               <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
               <Input name="lastName" label="Last Name" handleChange={handleChange} half />
+              <Input name="letterboxdUsername" label="Letterboxd Username (optional)" handleChange={handleChange} required={false} />
             </>
             )}
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
@@ -78,17 +91,19 @@ const SignUp = () => {
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             { isSignup ? 'Sign Up' : 'Sign In' }
           </Button>
-          <GoogleLogin
-            clientId={google_client_id}
-            render={(renderProps) => (
-              <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant="contained">
-                Sign In with Google
-              </Button>
-            )}
-            onSuccess={googleSuccess}
-            onFailure={googleError}
-            cookiePolicy="single_host_origin"
-          />
+          {googleClientId && (
+            <GoogleLogin
+              clientId={googleClientId}
+              render={(renderProps) => (
+                <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant="contained">
+                  Sign In with Google
+                </Button>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleError}
+              cookiePolicy="single_host_origin"
+            />
+          )}
           <Grid container justify="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
