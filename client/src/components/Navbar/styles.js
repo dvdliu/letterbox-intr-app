@@ -36,6 +36,10 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  matchLink: {
+    marginRight: '15px',
+    whiteSpace: 'nowrap',
+  },
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
@@ -45,6 +49,9 @@ export default makeStyles((theme) => ({
       padding: "10px 20px",
     },
     heading: {
+      display: "none",
+    },
+    matchLink: {
       display: "none",
     },
     userName: {
