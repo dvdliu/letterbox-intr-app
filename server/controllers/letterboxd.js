@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+import User from '../models/user.js';
+import { mockDiaryForUser, computeCompatibility } from '../utils/mockLetterboxd.js';
+
 const LETTERBOXD_API_BASE = process.env.LETTERBOXD_API_BASE || 'https://api.letterboxd.com/api/v0';
 const LETTERBOXD_API_KEY = process.env.LETTERBOXD_API_KEY || '';
 const LETTERBOXD_API_SECRET = process.env.LETTERBOXD_API_SECRET || '';
@@ -59,6 +62,88 @@ export const getFriendReviews = async (req, res) => {
     );
 
     res.status(200).json({ pending: false, reviews: reviewsByFriend.flat() });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Fetches a Letterboxd diary for matching purposes. Falls back to the
+// deterministic mock diary whenever there's no API key yet, or if the live
+// lookup fails (e.g. an unrecognized username) so matching never hard-errors.
+const getDiaryFor = async (username) => {
+  if (!LETTERBOXD_API_KEY) return mockDiaryForUser(username);
+
+  try {
+    const { data } = await letterboxdClient.get('/log-entries', {
+      params: { member: username, perPage: 50, sort: 'WhenAdded' },
+    });
+    const diary = (data?.items || []).map((entry) => ({
+      id: entry.film?.id || entry.id,
+      title: entry.film?.name,
+      year: entry.film?.releaseYear,
+      rating: entry.rating,
+    }));
+    return diary.length ? diary : mockDiaryForUser(username);
+  } catch (error) {
+    return mockDiaryForUser(username);
+  }
+};
+
+export const getMatch = async (req, res) => {
+  try {
+    const { userA, userB } = req.query;
+
+    if (!userA || !userB) {
+      return res.status(400).json({ message: 'userA and userB query params are required.' });
+    }
+
+    const [diaryA, diaryB] = await Promise.all([getDiaryFor(userA), getDiaryFor(userB)]);
+    const { score, sharedFilms } = computeCompatibility(diaryA, diaryB);
+
+    res.status(200).json({
+      pending: !LETTERBOXD_API_KEY,
+      userA,
+      userB,
+      score,
+      sharedFilms,
+      totalWatchedA: diaryA.length,
+      totalWatchedB: diaryB.length,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getMatches = async (req, res) => {
+  try {
+    const { username } = req.query;
+
+    if (!username) return res.status(400).json({ message: 'username query param is required.' });
+
+    const candidates = await User.find({
+      letterboxdUsername: { $exists: true, $nin: ['', username] },
+    });
+
+    const myDiary = await getDiaryFor(username);
+
+    const matches = await Promise.all(
+      candidates.map(async (candidate) => {
+        const otherDiary = await getDiaryFor(candidate.letterboxdUsername);
+        const { score, sharedFilms } = computeCompatibility(myDiary, otherDiary);
+
+        return {
+          name: candidate.name,
+          letterboxdUsername: candidate.letterboxdUsername,
+          score,
+          sharedFilmCount: sharedFilms.length,
+          topSharedFilms: sharedFilms.slice(0, 3),
+        };
+      })
+    );
+
+    matches.sort((a, b) => b.score - a.score);
+
+    res.status(200).json({ pending: !LETTERBOXD_API_KEY, username, matches });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
