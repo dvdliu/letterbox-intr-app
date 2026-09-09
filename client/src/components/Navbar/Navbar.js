@@ -42,6 +42,7 @@ const Navbar = () => {
         <img className={classes.image} src={memories} alt="icon" height="60" />
       </div>
       <Toolbar className={classes.toolbar}>
+        <Button component={Link} to="/matches" className={classes.matchLink}>Matches</Button>
         {user?.result ? (
           <div className={classes.profile}>
             <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
