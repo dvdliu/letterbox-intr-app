@@ -24,3 +24,14 @@ export const signup = (formData, router) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const updateLetterboxdUsername = (id, letterboxdUsername) => async (dispatch) => {
+  try {
+    const { data } = await api.updateProfile(id, { letterboxdUsername });
+    const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+
+    dispatch({ type: 'AUTH', data: { ...profile, result: data.result } });
+  } catch (error) {
+    console.log(error);
+  }
+};
