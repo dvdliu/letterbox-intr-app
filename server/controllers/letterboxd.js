@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import User from '../models/user.js';
-import { mockDiaryForUser, computeCompatibility } from '../utils/mockLetterboxd.js';
+import { mockDiaryForUser, computeCompatibility, MOCK_FRIEND_REVIEWS, DEMO_MATCH_CANDIDATES } from '../utils/mockLetterboxd.js';
 
 const LETTERBOXD_API_BASE = process.env.LETTERBOXD_API_BASE || 'https://api.letterboxd.com/api/v0';
 const LETTERBOXD_API_KEY = process.env.LETTERBOXD_API_KEY || '';
@@ -22,20 +22,8 @@ export const getFriendReviews = async (req, res) => {
     if (!LETTERBOXD_API_KEY) {
       return res.status(200).json({
         pending: true,
-        message: 'Letterboxd API key not configured. Awaiting API access approval.',
-        reviews: [
-          {
-            id: 'placeholder-1',
-            author: 'jane_doe',
-            avatar: '',
-            film: 'Sample Film',
-            year: 2024,
-            rating: 4.5,
-            review: 'Placeholder review while waiting for Letterboxd API access.',
-            createdAt: new Date().toISOString(),
-            link: '',
-          },
-        ],
+        message: 'Letterboxd API key not configured. Showing demo data.',
+        reviews: MOCK_FRIEND_REVIEWS,
       });
     }
 
@@ -120,14 +108,23 @@ export const getMatches = async (req, res) => {
 
     if (!username) return res.status(400).json({ message: 'username query param is required.' });
 
-    const candidates = await User.find({
+    const dbUsers = await User.find({
       letterboxdUsername: { $exists: true, $nin: ['', username] },
     });
+
+    const candidateList = LETTERBOXD_API_KEY
+      ? dbUsers
+      : [
+          ...dbUsers,
+          ...DEMO_MATCH_CANDIDATES.filter(
+            (d) => !dbUsers.some((u) => u.letterboxdUsername === d.letterboxdUsername)
+          ),
+        ];
 
     const myDiary = await getDiaryFor(username);
 
     const matches = await Promise.all(
-      candidates.map(async (candidate) => {
+      candidateList.map(async (candidate) => {
         const otherDiary = await getDiaryFor(candidate.letterboxdUsername);
         const { score, sharedFilms } = computeCompatibility(myDiary, otherDiary);
 

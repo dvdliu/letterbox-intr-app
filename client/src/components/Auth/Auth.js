@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import MovieIcon from '@material-ui/icons/Movie';
 
 import Icon from './icons';
 import { signin, signup } from '../../actions/auth';
@@ -72,7 +72,7 @@ const SignUp = () => {
     <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevation={3}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <MovieIcon />
         </Avatar>
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
@@ -111,7 +111,7 @@ const SignUp = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid >Developed By Hemant | Some rights reserved</Grid>
+          <Grid >Filmterest</Grid>
         </form>
       </Paper>
     </Container>
