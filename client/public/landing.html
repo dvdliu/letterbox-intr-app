@@ -11,14 +11,14 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --gold: #e8b84b;
-      --gold-dim: #c9962a;
-      --red: #e5091a;
-      --bg: #0a0a0f;
-      --bg-2: #111118;
-      --bg-3: #18181f;
-      --text: #f0eeea;
-      --text-muted: #888;
+      --purple: #7c3aed;
+      --purple-dim: #5b21b6;
+      --purple-light: #a78bfa;
+      --bg: #ffffff;
+      --bg-2: #f6f3fc;
+      --bg-3: #efe8fa;
+      --text: #1a1625;
+      --text-muted: #6e6b7a;
       --mono: 'JetBrains Mono', monospace;
       --display: 'Space Grotesk', sans-serif;
     }
@@ -36,7 +36,7 @@
     .filmstrip {
       width: 100%;
       height: 36px;
-      background: #111;
+      background: #2a1a4a;
       display: flex;
       align-items: center;
       gap: 0;
@@ -86,8 +86,8 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(232,184,75,0.10) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 30% at 80% 70%, rgba(229,9,26,0.06) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(124,58,237,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 70%, rgba(91,33,182,0.06) 0%, transparent 60%);
       pointer-events: none;
     }
 
@@ -97,8 +97,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(232,184,75,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(232,184,75,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
       background-size: 48px 48px;
       pointer-events: none;
     }
@@ -110,7 +110,7 @@
       width: 80px;
       height: 80px;
       margin: 0 auto 24px;
-      filter: drop-shadow(0 0 18px rgba(232,184,75,0.4));
+      filter: drop-shadow(0 0 18px rgba(124,58,237,0.4));
     }
 
     .hero-eyebrow {
@@ -118,7 +118,7 @@
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--purple);
       margin-bottom: 20px;
     }
 
@@ -128,7 +128,7 @@
       letter-spacing: -0.04em;
       line-height: 1;
       margin-bottom: 24px;
-      background: linear-gradient(135deg, #fff 0%, var(--gold) 60%, var(--gold-dim) 100%);
+      background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dim) 60%, #2a1a4a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -137,7 +137,7 @@
     .hero-tagline {
       font-size: clamp(16px, 2.5vw, 22px);
       font-weight: 400;
-      color: #aaa;
+      color: #55525f;
       line-height: 1.5;
       max-width: 520px;
       margin: 0 auto 40px;
@@ -172,24 +172,24 @@
     .btn:hover { transform: translateY(-2px); }
 
     .btn-primary {
-      background: var(--gold);
-      color: #0a0a0f;
-      box-shadow: 0 4px 20px rgba(232,184,75,0.3);
+      background: var(--purple);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.3);
     }
-    .btn-primary:hover { box-shadow: 0 6px 28px rgba(232,184,75,0.45); }
+    .btn-primary:hover { box-shadow: 0 6px 28px rgba(124,58,237,0.45); }
 
     .btn-secondary {
       background: transparent;
       color: var(--text);
-      border: 1.5px solid rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(0,0,0,0.15);
     }
-    .btn-secondary:hover { border-color: rgba(255,255,255,0.35); }
+    .btn-secondary:hover { border-color: rgba(0,0,0,0.35); }
 
     /* ── STATS BAR ── */
     .stats-bar {
       background: var(--bg-2);
-      border-top: 1px solid rgba(232,184,75,0.1);
-      border-bottom: 1px solid rgba(232,184,75,0.1);
+      border-top: 1px solid rgba(124,58,237,0.1);
+      border-bottom: 1px solid rgba(124,58,237,0.1);
       padding: 28px 24px;
       display: flex;
       justify-content: center;
@@ -201,7 +201,7 @@
     .stat-num {
       font-size: 32px;
       font-weight: 700;
-      color: var(--gold);
+      color: var(--purple);
       letter-spacing: -0.03em;
       line-height: 1;
     }
@@ -226,7 +226,7 @@
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--purple);
       margin-bottom: 16px;
       text-align: center;
     }
@@ -248,13 +248,13 @@
 
     .feature-card {
       background: var(--bg-2);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(0,0,0,0.06);
       border-radius: 16px;
       padding: 32px;
       transition: border-color 0.2s, transform 0.2s;
     }
     .feature-card:hover {
-      border-color: rgba(232,184,75,0.25);
+      border-color: rgba(124,58,237,0.25);
       transform: translateY(-3px);
     }
 
@@ -262,8 +262,8 @@
       width: 44px;
       height: 44px;
       border-radius: 10px;
-      background: rgba(232,184,75,0.1);
-      border: 1px solid rgba(232,184,75,0.2);
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -293,17 +293,17 @@
 
     .mock-browser {
       background: var(--bg-3);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,0,0,0.08);
       border-radius: 16px;
       overflow: hidden;
       box-shadow:
-        0 0 0 1px rgba(232,184,75,0.08),
-        0 32px 80px rgba(0,0,0,0.6);
+        0 0 0 1px rgba(124,58,237,0.08),
+        0 32px 80px rgba(76,29,149,0.18);
     }
 
     .mock-bar {
       background: var(--bg-2);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
       padding: 12px 16px;
       display: flex;
       align-items: center;
@@ -327,7 +327,7 @@
       font-family: var(--mono);
       font-size: 12px;
       color: var(--text-muted);
-      background: rgba(255,255,255,0.05);
+      background: rgba(0,0,0,0.05);
       border-radius: 6px;
       padding: 4px 12px;
       flex: 1;
@@ -352,12 +352,12 @@
       background: var(--bg-2);
       border-radius: 10px;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
     }
 
     .mock-post-img {
       height: 90px;
-      background: linear-gradient(135deg, #1a1a2a, #2a1a1a);
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -389,13 +389,13 @@
       background: var(--bg-2);
       border-radius: 10px;
       padding: 14px;
-      border: 1px solid rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
     }
 
     .mock-review-header {
       font-size: 11px;
       font-weight: 600;
-      color: var(--gold);
+      color: var(--purple);
       margin-bottom: 4px;
     }
 
@@ -407,14 +407,14 @@
 
     .mock-stars {
       font-size: 10px;
-      color: var(--gold);
+      color: var(--purple);
       margin-top: 5px;
     }
 
     /* ── MATCH BAR ── */
     .match-bar-section {
       background: var(--bg-2);
-      border-top: 1px solid rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(0,0,0,0.05);
       padding: 20px 32px;
       display: flex;
       align-items: center;
@@ -435,13 +435,13 @@
     }
 
     .match-chip {
-      background: rgba(133,0,255,0.15);
-      border: 1px solid rgba(133,0,255,0.3);
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.3);
       border-radius: 20px;
       padding: 4px 14px;
       font-size: 12px;
       font-weight: 600;
-      color: #bf7fff;
+      color: #5b21b6;
       display: flex;
       gap: 8px;
       align-items: center;
@@ -455,7 +455,7 @@
     /* ── FOOTER ── */
     .footer {
       background: var(--bg-2);
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(0,0,0,0.06);
       padding: 40px 24px;
       text-align: center;
     }
@@ -464,7 +464,7 @@
       font-size: 24px;
       font-weight: 700;
       letter-spacing: -0.03em;
-      color: var(--gold);
+      color: var(--purple);
       margin-bottom: 8px;
     }
 
@@ -488,7 +488,7 @@
       text-decoration: none;
       transition: color 0.15s;
     }
-    .footer-links a:hover { color: var(--gold); }
+    .footer-links a:hover { color: var(--purple); }
   </style>
 </head>
 <body>
@@ -515,18 +515,18 @@
   <div class="hero-content">
     <!-- TV Logo SVG -->
     <svg class="hero-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-      <rect x="8" y="22" width="84" height="56" rx="6" fill="#0f0f0f" stroke="#e8b84b" stroke-width="3"/>
-      <rect x="16" y="30" width="68" height="38" rx="3" fill="#1a1a1a" stroke="#e8b84b" stroke-width="1.5"/>
-      <rect x="20" y="34" width="60" height="30" rx="2" fill="#e8b84b" opacity="0.08"/>
-      <line x1="20" y1="42" x2="80" y2="42" stroke="#e8b84b" stroke-width="1" opacity="0.2"/>
-      <line x1="20" y1="50" x2="80" y2="50" stroke="#e8b84b" stroke-width="1" opacity="0.2"/>
-      <line x1="20" y1="58" x2="80" y2="58" stroke="#e8b84b" stroke-width="1" opacity="0.2"/>
-      <line x1="35" y1="22" x2="22" y2="6" stroke="#e8b84b" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="22" cy="6" r="2.5" fill="#e8b84b"/>
-      <line x1="65" y1="22" x2="78" y2="6" stroke="#e8b84b" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="78" cy="6" r="2.5" fill="#e8b84b"/>
-      <rect x="44" y="78" width="12" height="8" rx="1" fill="#e8b84b"/>
-      <rect x="30" y="86" width="40" height="6" rx="3" fill="#e8b84b"/>
+      <rect x="8" y="22" width="84" height="56" rx="6" fill="#2a1a4a" stroke="#7c3aed" stroke-width="3"/>
+      <rect x="16" y="30" width="68" height="38" rx="3" fill="#3b2463" stroke="#7c3aed" stroke-width="1.5"/>
+      <rect x="20" y="34" width="60" height="30" rx="2" fill="#7c3aed" opacity="0.08"/>
+      <line x1="20" y1="42" x2="80" y2="42" stroke="#7c3aed" stroke-width="1" opacity="0.2"/>
+      <line x1="20" y1="50" x2="80" y2="50" stroke="#7c3aed" stroke-width="1" opacity="0.2"/>
+      <line x1="20" y1="58" x2="80" y2="58" stroke="#7c3aed" stroke-width="1" opacity="0.2"/>
+      <line x1="35" y1="22" x2="22" y2="6" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="22" cy="6" r="2.5" fill="#7c3aed"/>
+      <line x1="65" y1="22" x2="78" y2="6" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="78" cy="6" r="2.5" fill="#7c3aed"/>
+      <rect x="44" y="78" width="12" height="8" rx="1" fill="#7c3aed"/>
+      <rect x="30" y="86" width="40" height="6" rx="3" fill="#7c3aed"/>
     </svg>
 
     <h1 class="hero-title">Filmterest</h1>
@@ -650,7 +650,7 @@
 
       <!-- Sidebar reviews -->
       <div class="mock-sidebar">
-        <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#888;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Friends' Reviews</div>
+        <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6e6b7a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Friends' Reviews</div>
         <div class="mock-review">
           <div class="mock-review-header">cinephile_maya on Anora</div>
           <div class="mock-review-text">Sean Baker at his absolute best. The final act completely wrecked me.</div>
