@@ -23,13 +23,7 @@ const FriendReviews = () => {
         Friends' Letterboxd Reviews
       </Typography>
 
-      {pending && (
-        <div className={classes.pendingBanner}>
-          Letterboxd API access pending. Showing placeholder data until approval is granted.
-        </div>
-      )}
-
-      {loading && <CircularProgress size={24} />}
+{loading && <CircularProgress size={24} />}
       {error && <Typography color="error">{error}</Typography>}
 
       {!loading && reviews.length === 0 && !error && (

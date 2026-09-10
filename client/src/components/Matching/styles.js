@@ -4,6 +4,7 @@ export default makeStyles((theme) => ({
   container: {
     padding: theme.spacing(3),
     borderRadius: 15,
+    marginTop: theme.spacing(3),
   },
   heading: {
     marginBottom: theme.spacing(0.5),
@@ -14,11 +15,19 @@ export default makeStyles((theme) => ({
   },
   form: {
     display: 'flex',
-    flexDirection: 'column',
-    maxWidth: 480,
+    flexDirection: 'row',
+    gap: theme.spacing(2),
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    marginBottom: theme.spacing(1),
+  },
+  formField: {
+    flex: '1 1 220px',
   },
   button: {
     marginTop: theme.spacing(1),
+    alignSelf: 'center',
+    whiteSpace: 'nowrap',
   },
   spinner: {
     display: 'block',
@@ -26,7 +35,6 @@ export default makeStyles((theme) => ({
   },
   result: {
     marginTop: theme.spacing(3),
-    maxWidth: 480,
   },
   score: {
     color: 'rgb(133,0,255)',
@@ -42,10 +50,16 @@ export default makeStyles((theme) => ({
     fontSize: 13,
     marginBottom: theme.spacing(1),
   },
+  filmGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+    gap: theme.spacing(1),
+    marginTop: theme.spacing(1),
+  },
   filmRow: {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: theme.spacing(0.75, 0),
+    padding: theme.spacing(0.75),
     borderBottom: '1px solid #eee',
   },
   filmRatings: {
@@ -59,23 +73,28 @@ export default makeStyles((theme) => ({
     backgroundColor: '#fff4d6',
     color: '#7a5c00',
     fontSize: 13,
-    maxWidth: 480,
   },
   divider: {
     margin: theme.spacing(3, 0),
-    maxWidth: 480,
   },
   matchesSection: {
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: 480,
+  },
+  matchGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+    gap: theme.spacing(2),
+    marginTop: theme.spacing(2),
   },
   matchCard: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: theme.spacing(1, 0),
-    borderBottom: '1px solid #eee',
+    padding: theme.spacing(1.5),
+    borderRadius: 8,
+    border: '1px solid #eee',
+    backgroundColor: '#fafafa',
   },
   chip: {
     backgroundColor: 'rgb(133,0,255)',

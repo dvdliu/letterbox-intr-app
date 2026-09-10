@@ -54,19 +54,19 @@ const Matching = () => {
           value={usernameInput}
           onChange={(e) => setUsernameInput(e.target.value)}
           onBlur={saveUsername}
-          fullWidth
           margin="dense"
           variant="outlined"
+          className={classes.formField}
         />
         <TextField
           label="Compare with (Letterboxd username)"
           value={otherUsername}
           onChange={(e) => setOtherUsername(e.target.value)}
-          fullWidth
           margin="dense"
           variant="outlined"
+          className={classes.formField}
         />
-        <Button type="submit" variant="contained" color="primary" fullWidth className={classes.button}>
+        <Button type="submit" variant="contained" color="primary" className={classes.button}>
           Check Compatibility
         </Button>
       </form>
@@ -76,28 +76,25 @@ const Matching = () => {
 
       {match && (
         <div className={classes.result}>
-          {match.pending && (
-            <div className={classes.pendingBanner}>
-              Letterboxd API access pending — showing a taste-match estimate from placeholder data.
-            </div>
-          )}
-          <Typography variant="h4" align="center" className={classes.score}>
+<Typography variant="h4" align="center" className={classes.score}>
             {match.score}% match
           </Typography>
           <LinearProgress variant="determinate" value={match.score} className={classes.bar} />
           <Typography variant="body2" align="center" className={classes.meta}>
             {match.sharedFilms.length} films in common ({match.totalWatchedA} vs {match.totalWatchedB} watched)
           </Typography>
-          {match.sharedFilms.slice(0, 8).map((f) => (
-            <div key={f.id} className={classes.filmRow}>
-              <Typography variant="body2">
-                {f.title} {f.year ? `(${f.year})` : ''}
-              </Typography>
-              <Typography variant="body2" className={classes.filmRatings}>
-                {f.ratingA}★ vs {f.ratingB}★
-              </Typography>
-            </div>
-          ))}
+          <div className={classes.filmGrid}>
+            {match.sharedFilms.slice(0, 12).map((f) => (
+              <div key={f.id} className={classes.filmRow}>
+                <Typography variant="body2">
+                  {f.title} {f.year ? `(${f.year})` : ''}
+                </Typography>
+                <Typography variant="body2" className={classes.filmRatings}>
+                  {f.ratingA}★ vs {f.ratingB}★
+                </Typography>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -110,18 +107,14 @@ const Matching = () => {
 
         {matchesLoading && <CircularProgress size={24} className={classes.spinner} />}
         {matchesError && <Typography color="error">{matchesError}</Typography>}
-        {matchesPending && matches.length > 0 && (
-          <div className={classes.pendingBanner}>
-            Letterboxd API access pending — matches are estimated from placeholder data.
-          </div>
-        )}
-
-        {matches.map((m) => (
-          <div key={m.letterboxdUsername} className={classes.matchCard}>
-            <Typography variant="subtitle2">{m.name} (@{m.letterboxdUsername})</Typography>
-            <Chip label={`${m.score}% match`} className={classes.chip} size="small" />
-          </div>
-        ))}
+<div className={classes.matchGrid}>
+          {matches.map((m) => (
+            <div key={m.letterboxdUsername} className={classes.matchCard}>
+              <Typography variant="subtitle2">{m.name} (@{m.letterboxdUsername})</Typography>
+              <Chip label={`${m.score}% match`} className={classes.chip} size="small" />
+            </div>
+          ))}
+        </div>
 
         {matches.length === 0 && !matchesLoading && (
           <Typography variant="body2" className={classes.meta}>

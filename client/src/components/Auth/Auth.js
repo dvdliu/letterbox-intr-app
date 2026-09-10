@@ -79,13 +79,13 @@ const SignUp = () => {
           <Grid container spacing={2}>
             { isSignup && (
             <>
-              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
-              <Input name="lastName" label="Last Name" handleChange={handleChange} half />
-              <Input name="letterboxdUsername" label="Letterboxd Username (optional)" handleChange={handleChange} required={false} />
+              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half value={form.firstName} />
+              <Input name="lastName" label="Last Name" handleChange={handleChange} half value={form.lastName} />
+              <Input name="letterboxdUsername" label="Letterboxd Username (optional)" handleChange={handleChange} required={false} value={form.letterboxdUsername} />
             </>
             )}
-            <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
-            <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
+            <Input name="email" label="Email Address" handleChange={handleChange} type="email" value={form.email} />
+            <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} value={form.password} />
             {/* { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> } */}
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filmterest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #e8b84b;
+      --gold-dim: #c9962a;
+      --red: #e5091a;
+      --bg: #0a0a0f;
+      --bg-2: #111118;
+      --bg-3: #18181f;
+      --text: #f0eeea;
+      --text-muted: #888;
+      --mono: 'JetBrains Mono', monospace;
+      --display: 'Space Grotesk', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--display);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── FILM STRIP BORDER ── */
+    .filmstrip {
+      width: 100%;
+      height: 36px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .filmstrip::before,
+    .filmstrip::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 16px;
+    }
+    .filmstrip-holes {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 0 12px;
+      width: 100%;
+    }
+    .filmstrip-hole {
+      width: 16px;
+      height: 20px;
+      border-radius: 3px;
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* radial glow */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(232,184,75,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 70%, rgba(229,9,26,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* subtle grid */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,184,75,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,184,75,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 760px; }
+
+    /* TV logo */
+    .hero-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      filter: drop-shadow(0 0 18px rgba(232,184,75,0.4));
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(56px, 10vw, 96px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #fff 0%, var(--gold) 60%, var(--gold-dim) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-tagline {
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 400;
+      color: #aaa;
+      line-height: 1.5;
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-tagline strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #0a0a0f;
+      box-shadow: 0 4px 20px rgba(232,184,75,0.3);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 28px rgba(232,184,75,0.45); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid rgba(255,255,255,0.15);
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.35); }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--bg-2);
+      border-top: 1px solid rgba(232,184,75,0.1);
+      border-bottom: 1px solid rgba(232,184,75,0.1);
+      padding: 28px 24px;
+      display: flex;
+      justify-content: center;
+      gap: clamp(32px, 6vw, 96px);
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 96px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      text-align: center;
+      margin-bottom: 64px;
+      color: var(--text);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(232,184,75,0.25);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(232,184,75,0.1);
+      border: 1px solid rgba(232,184,75,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── MOCK UI PREVIEW ── */
+    .preview-section {
+      padding: 0 24px 96px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .mock-browser {
+      background: var(--bg-3);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(232,184,75,0.08),
+        0 32px 80px rgba(0,0,0,0.6);
+    }
+
+    .mock-bar {
+      background: var(--bg-2);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mock-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .mock-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .mock-dot:nth-child(1) { background: #ff5f57; }
+    .mock-dot:nth-child(2) { background: #febc2e; }
+    .mock-dot:nth-child(3) { background: #28c840; }
+
+    .mock-url {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 4px 12px;
+      flex: 1;
+      max-width: 320px;
+    }
+
+    .mock-body {
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      min-height: 340px;
+    }
+
+    .mock-posts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .mock-post {
+      background: var(--bg-2);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .mock-post-img {
+      height: 90px;
+      background: linear-gradient(135deg, #1a1a2a, #2a1a1a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .mock-post-body { padding: 10px 12px; }
+
+    .mock-post-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .mock-post-text {
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .mock-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mock-review {
+      background: var(--bg-2);
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .mock-review-header {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .mock-review-text {
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .mock-stars {
+      font-size: 10px;
+      color: var(--gold);
+      margin-top: 5px;
+    }
+
+    /* ── MATCH BAR ── */
+    .match-bar-section {
+      background: var(--bg-2);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .match-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .match-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .match-chip {
+      background: rgba(133,0,255,0.15);
+      border: 1px solid rgba(133,0,255,0.3);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #bf7fff;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .match-chip span {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--bg-2);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .footer-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<!-- TOP FILM STRIP -->
+<div class="filmstrip">
+  <div class="filmstrip-holes">
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <!-- TV Logo SVG -->
+    <svg class="hero-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <rect x="8" y="22" width="84" height="56" rx="6" fill="#0f0f0f" stroke="#e8b84b" stroke-width="3"/>
+      <rect x="16" y="30" width="68" height="38" rx="3" fill="#1a1a1a" stroke="#e8b84b" stroke-width="1.5"/>
+      <rect x="20" y="34" width="60" height="30" rx="2" fill="#e8b84b" opacity="0.08"/>
+      <line x1="20" y1="42" x2="80" y2="42" stroke="#e8b84b" stroke-width="1" opacity="0.2"/>
+      <line x1="20" y1="50" x2="80" y2="50" stroke="#e8b84b" stroke-width="1" opacity="0.2"/>
+      <line x1="20" y1="58" x2="80" y2="58" stroke="#e8b84b" stroke-width="1" opacity="0.2"/>
+      <line x1="35" y1="22" x2="22" y2="6" stroke="#e8b84b" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="22" cy="6" r="2.5" fill="#e8b84b"/>
+      <line x1="65" y1="22" x2="78" y2="6" stroke="#e8b84b" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="78" cy="6" r="2.5" fill="#e8b84b"/>
+      <rect x="44" y="78" width="12" height="8" rx="1" fill="#e8b84b"/>
+      <rect x="30" y="86" width="40" height="6" rx="3" fill="#e8b84b"/>
+    </svg>
+
+    <h1 class="hero-title">Filmterest</h1>
+    <div class="hero-cta-row">
+      <a href="/auth" class="btn btn-primary">Get Started</a>
+      <a href="#features" class="btn btn-secondary">See How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM FILM STRIP -->
+<div class="filmstrip">
+  <div class="filmstrip-holes">
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">40+</div>
+    <div class="stat-label">Films in pool</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">0–100</div>
+    <div class="stat-label">Taste match score</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">3</div>
+    <div class="stat-label">Core features</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">Full-stack</div>
+    <div class="stat-label">React · Node · MongoDB</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label">What it does</div>
+  <h2 class="section-title">Everything a film lover needs</h2>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🎬</div>
+      <div class="feature-title">Post Your Takes</div>
+      <div class="feature-desc">
+        Share reviews, hot takes, and film recommendations. Like and interact with posts from the community in a familiar social feed.
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📺</div>
+      <div class="feature-title">Friends' Letterboxd Reviews</div>
+      <div class="feature-desc">
+        Link your Letterboxd account and see a live feed of what your friends have been watching and rating — all in one place.
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Taste Matching</div>
+      <div class="feature-desc">
+        Get a 0–100 compatibility score with any Letterboxd user based on overlap and rating similarity. Find your top matches among other members.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOCK UI PREVIEW -->
+<section class="preview-section">
+  <div class="mock-browser">
+    <div class="mock-bar">
+      <div class="mock-dots">
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+      </div>
+      <div class="mock-url">filmterest.app</div>
+    </div>
+    <div class="mock-body">
+      <!-- Posts grid -->
+      <div class="mock-posts">
+        <div class="mock-post">
+          <div class="mock-post-img">🎬</div>
+          <div class="mock-post-body">
+            <div class="mock-post-name">David Liu &nbsp;·&nbsp; Past Lives</div>
+            <div class="mock-post-text">Celine Song's debut is quietly devastating. The final scene might be the best-acted moment of the decade.</div>
+          </div>
+        </div>
+        <div class="mock-post">
+          <div class="mock-post-img">🏜️</div>
+          <div class="mock-post-body">
+            <div class="mock-post-name">David Liu &nbsp;·&nbsp; Dune: Part Two</div>
+            <div class="mock-post-text">Villeneuve delivered. The sandworm sequence had the entire theater holding their breath.</div>
+          </div>
+        </div>
+        <div class="mock-post">
+          <div class="mock-post-img">🌌</div>
+          <div class="mock-post-body">
+            <div class="mock-post-name">David Liu &nbsp;·&nbsp; Interstellar</div>
+            <div class="mock-post-text">Rewatched on IMAX. Hans Zimmer's organ score hits different when it's rattling the seat.</div>
+          </div>
+        </div>
+        <div class="mock-post">
+          <div class="mock-post-img">🎾</div>
+          <div class="mock-post-body">
+            <div class="mock-post-name">David Liu &nbsp;·&nbsp; Challengers</div>
+            <div class="mock-post-text">Guadagnino turned a love triangle into a sports thriller. The score is insane. 4.5/5.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar reviews -->
+      <div class="mock-sidebar">
+        <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#888;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Friends' Reviews</div>
+        <div class="mock-review">
+          <div class="mock-review-header">cinephile_maya on Anora</div>
+          <div class="mock-review-text">Sean Baker at his absolute best. The final act completely wrecked me.</div>
+          <div class="mock-stars">★★★★★</div>
+        </div>
+        <div class="mock-review">
+          <div class="mock-review-header">reeltalks_jay on The Substance</div>
+          <div class="mock-review-text">Coralie Fargeat goes fully unhinged and I am HERE for it.</div>
+          <div class="mock-stars">★★★★</div>
+        </div>
+        <div class="mock-review">
+          <div class="mock-review-header">nora_letterboxd on Aftersun</div>
+          <div class="mock-review-text">The most shattering thing I've ever witnessed on film.</div>
+          <div class="mock-stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Match bar -->
+    <div class="match-bar-section">
+      <div class="match-label">Top Matches</div>
+      <div class="match-chips">
+        <div class="match-chip">Maya Chen <span>87% match</span></div>
+        <div class="match-chip">Jay Okafor <span>74% match</span></div>
+        <div class="match-chip">Annalise Park <span>68% match</span></div>
+        <div class="match-chip">Nora Dubois <span>61% match</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="filmstrip">
+  <div class="filmstrip-holes">
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+    <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-logo">Filmterest</div>
+  <div class="footer-sub">Your films. Your taste. Your people.</div>
+  <div class="footer-links">
+    <a href="/auth">Sign Up</a>
+    <a href="https://github.com" target="_blank">GitHub</a>
+    <a href="/#projects" target="_blank">Portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>

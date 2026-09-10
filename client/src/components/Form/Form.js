@@ -61,7 +61,7 @@ const Form = ({ currentId, setCurrentId }) => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
-          {currentId ? "Editing the post" : "QuickShare"}
+          {currentId ? "Editing the post" : "Filmterest"}
         </Typography>
         {/* <TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} /> */}
         <TextField

@@ -6,6 +6,7 @@ import { getPosts } from '../../actions/posts';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import FriendReviews from '../FriendReviews/FriendReviews';
+import Matching from '../Matching/Matching';
 import useStyles from './styles';
 const Home = () => {
   const [currentId, setCurrentId] = useState(0);
@@ -31,6 +32,9 @@ const Home = () => {
           <Grid item xs={12} sm={4}>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
             <FriendReviews />
+          </Grid>
+          <Grid item xs={12}>
+            <Matching />
           </Grid>
         </Grid>
       </Container>
