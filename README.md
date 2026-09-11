@@ -1,5 +1,7 @@
 # Filmterest
 
+*Written with the help of Claude.*
+
 A social media app for sharing posts, viewing friends' Letterboxd reviews, and matching with people who share your film taste. Users can sign up, sign in (including with Google), create and like posts, see a feed of reviews their friends have left on Letterboxd, and check a compatibility score against any Letterboxd username or other Filmterest members.
 
 ## Tech Stack
